@@ -18,13 +18,13 @@ describe("Phrase", function() {
       let punctuatedPalindrome = new Phrase("Madam, I'm Adam.");
       assert(punctuatedPalindrome.palindrome());
     });
-    it("should return true for the empty string", function() {
-      let emptyPhrase = new Phrase("");
-      assert(emptyPhrase.palindrome());
-    });
-    it("should return true for a string with no letters", function() {
+    it("should return false for a string with no letters", function() {
       let noLetters = new Phrase("234.56");
-      assert(noLetters.palindrome());
+      assert(!noLetters.palindrome());
+    });
+    it("should return false for the empty string", function() {
+      let emptyPhrase = new Phrase("");
+      assert(!emptyPhrase.palindrome());
     });
   });
 
