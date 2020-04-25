@@ -1,0 +1,34 @@
+#!/usr/local/bin/node
+
+let {https} = require("follow-redirects");
+let Phrase = require("qwrtp-palindrome");
+
+const options = {
+  hostname: 'cdn.learnenough.com',
+  path: '/phrases.txt',
+  method: 'GET',          // or HEAD to just look at the headers
+  followRedirects: true   // default is true
+}
+
+req = https.request(options, (res) => {
+  res.setEncoding('utf8');
+
+  // STATUS CODE
+  // console.log(`statusCode: ${res.statusCode}`);
+
+  // HEADERS
+  // for(let item in res.headers) {
+  //   console.log(`${item}: ${res.headers[item]}`);
+  // }
+
+  // BODY
+  res.on('data', body => {
+    let lines = body.split("\n");
+    let palindromes = lines.filter(line => new Phrase(line).palindrome());
+    palindromes.forEach((palindrome) => {
+      console.log("palindrome detected:", palindrome);
+    });
+  });
+});
+
+req.end();

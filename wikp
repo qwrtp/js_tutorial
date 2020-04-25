@@ -1,0 +1,33 @@
+#!/usr/local/bin/node
+let {https} = require("follow-redirects");
+var path = require("path");  // for basename()
+
+let url = process.argv[2];     // https://es.wikipedia.org/wiki/JavaScript
+
+// if url is empty print usage and exit
+if (!url) {
+  console.log(`usage: ${path.basename(__filename)} <url>`);
+  process.exit(1);
+}
+
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+
+req = https.request(url, (res) => {
+  res.setEncoding('utf8');
+
+  res.on('data', body => {
+    let { document } = (new JSDOM(body)).window;
+    let paragraphs = document.querySelectorAll("p");
+    let references = document.querySelectorAll(".reference");
+    references.forEach((reference) => {
+      reference.remove();
+    });
+    paragraphs.forEach((paragraph) => {
+      console.log(paragraph.textContent);
+    });
+  });
+});
+
+
+req.end();

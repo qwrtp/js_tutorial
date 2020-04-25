@@ -1,0 +1,27 @@
+#!/usr/local/bin/node
+
+let fs = require("fs");
+let Phrase = require("qwrtp-palindrome");
+let palindromes = new String();
+let notPalindromes = new String();
+
+let text = fs.readFileSync("phrases.txt", "utf-8");
+text.split("\n").forEach((line) => {
+  let phrase = new Phrase(line);
+  if (phrase.palindrome()) {
+    palindromes += `${line}\n`;
+  } else {
+    notPalindromes += `${line}\n`;
+  }
+});
+
+function writeResults(fileName, data) {
+  fs.writeFile(fileName, data, (error) => {
+    if (error) {
+      throw error;
+    } else { console.log(`File "${fileName}" written succesfully`);}
+  });
+};
+
+writeResults("phrases_palindromes.txt", palindromes);
+writeResults("phrases_not_palindromes.txt", notPalindromes);
